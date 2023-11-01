@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import "./App.css";
-
-// using axios to send data to apis
 import axios from "axios"; // Import Axios
 
 function App() {
-  // Define state variables for each form field
   const [formData, setFormData] = useState({
     id: "",
     createdDate: "",
@@ -17,7 +14,8 @@ function App() {
     salary: null,
   });
 
-  // Handle form input changes
+  const [fetchedData, setFetchedData] = useState(null);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -26,10 +24,8 @@ function App() {
     });
   };
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    // You can do something with the form data here, like sending it to an API
 
     const postData = {
       id: formData.id,
@@ -42,14 +38,11 @@ function App() {
       salary: formData.salary,
     };
 
-    // Make a POST request to your API
     axios
       .post('https://localhost:44367/api/crudoperations/InsertRecord', postData)
       .then((response) => {
-        // Handle the API response (e.g., success or error)
         console.log('Data sent successfully:', response.data);
 
-        // Optionally, reset the form fields after successful submission
         setFormData({
           id: '',
           createdDate: '',
@@ -62,8 +55,20 @@ function App() {
         });
       })
       .catch((error) => {
-        // Handle API request error
         console.error('Error:', error);
+      });
+  };
+
+  // https://localhost:44367/api/crudoperations/GetAllRecord
+  const handleFetchData = () => {
+    axios
+      .get('https://localhost:44367/api/crudoperations/GetAllRecord')
+      .then((response) => {
+        // Set the fetched data in the state
+        setFetchedData(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
       });
   };
 
@@ -153,6 +158,15 @@ function App() {
         <br />
         <button type="submit">Submit</button>
       </form>
+      <button onClick={handleFetchData}>Fetch Data</button>
+      <div>
+        <h2>Fetched Data</h2>
+        {fetchedData ? (
+          <pre>{JSON.stringify(fetchedData, null, 2)}</pre>
+        ) : (
+          <p>No data fetched yet.</p>
+        )}
+      </div>
     </div>
   );
 }
