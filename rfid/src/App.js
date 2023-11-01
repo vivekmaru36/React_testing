@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+
+// using axios to send data to apis
+import axios from "axios"; // Import Axios
 
 function App() {
   // Define state variables for each form field
   const [formData, setFormData] = useState({
-    id: '',
-    createdDate: '',
-    updatedDate: '',
-    firstName: 'Vivek',
-    lastName: 'Maru',
-    age: 19,
-    contact: '93265999644',
-    salary: 10000,
+    id: "",
+    createdDate: "",
+    updatedDate: "",
+    firstName: "",
+    lastName: "",
+    age: null,
+    contact: "",
+    salary: null,
   });
 
   // Handle form input changes
@@ -27,6 +30,41 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // You can do something with the form data here, like sending it to an API
+
+    const postData = {
+      id: formData.id,
+      createdDate: formData.createdDate,
+      updatedDate: formData.updatedDate,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      age: formData.age,
+      contact: formData.contact,
+      salary: formData.salary,
+    };
+
+    // Make a POST request to your API
+    axios
+      .post('https://localhost:44367/api/crudoperations/InsertRecord', postData)
+      .then((response) => {
+        // Handle the API response (e.g., success or error)
+        console.log('Data sent successfully:', response.data);
+
+        // Optionally, reset the form fields after successful submission
+        setFormData({
+          id: '',
+          createdDate: '',
+          updatedDate: '',
+          firstName: '',
+          lastName: '',
+          age: '',
+          contact: '',
+          salary: '',
+        });
+      })
+      .catch((error) => {
+        // Handle API request error
+        console.error('Error:', error);
+      });
   };
 
   return (
