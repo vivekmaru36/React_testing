@@ -59,6 +59,16 @@ function App() {
       });
   };
 
+  // State variables for extracted data
+  const [id, setId] = useState(null);
+  const [createdDate, setCreatedDate] = useState(null);
+  const [updatedDate, setUpdatedDate] = useState(null);
+  const [firstName, setFirstName] = useState(null);
+  const [lastName, setLastName] = useState(null);
+  const [salary, setSalary] = useState(null);
+  const [age, setAge] = useState(null);
+  const [contact, setcontact] = useState(null);
+
   // https://localhost:44367/api/crudoperations/GetAllRecord
   const handleFetchData = () => {
     axios
@@ -66,6 +76,15 @@ function App() {
       .then((response) => {
         // Set the fetched data in the state
         setFetchedData(response.data);
+        // storing each one
+        setId(response.data.id);
+        setCreatedDate(response.data.createdDate);
+        setUpdatedDate(response.data.updatedDate);
+        setFirstName(response.data.firstName);
+        setLastName(response.data.lastName);
+        setAge(response.data.age);
+        setcontact(response.data.contact);
+        setSalary(response.data.salary);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -162,7 +181,14 @@ function App() {
       <div>
         <h2>Fetched Data</h2>
         {fetchedData ? (
-          <pre>{JSON.stringify(fetchedData, null, 2)}</pre>
+          // <pre>{JSON.stringify(fetchedData, null, 2)}</pre>
+          <div>
+          <pre>
+            <p>First Name : {JSON.stringify(fetchedData.data[0].firstName)} </p>
+            <p>Last Name : {JSON.stringify(fetchedData.data[0].lastName)} </p>
+            <p>Age : {JSON.stringify(fetchedData.data[0].age)} </p>
+          </pre>
+          </div>
         ) : (
           <p>No data fetched yet.</p>
         )}
